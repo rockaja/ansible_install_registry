@@ -1,0 +1,27 @@
+---
+
+  - hosts: all
+    sudo: yes
+
+    tasks:
+
+    - name: Update using apt-get
+      apt: update_cache=yes
+      when: ansible_os_family == "Ubuntu"
+
+    - name: Update using yum
+      yum: update_cache=yes
+      when: ansible_os_family == "RedHat"
+
+    - name: Run Docker Script
+      shell: curl -sSL https://get.docker.com/ | sh
+
+    - name: Give current user sudo to docker
+      shell: usermod -aG docker ${USER}
+
+    - name: Install Shipyard
+      shell: curl -s https://shipyard-project.com/deploy | PORT=9000 bash -s
+
+    handlers:
+     - name: restart docker
+       service: name=docker state=restarted
