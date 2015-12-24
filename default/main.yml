@@ -19,8 +19,8 @@
     - name: Give current user sudo to docker
       shell: usermod -aG docker ${USER}
 
-    - name: Install Shipyard
-      shell: curl -s https://shipyard-project.com/deploy | PORT=9000 bash -s
+    - name: Install Docker Registry
+      shell: sudo docker run -d -p 5000:5000 --restart=always --name registry registry:2
 
     handlers:
      - name: restart docker
